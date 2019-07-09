@@ -71,10 +71,7 @@ class Scraper(object):
 
 if __name__ == '__main__':
     from multiprocessing import Value
-    class requests(object):
-        @staticmethod
-        def get(url):
-            pass
+    import requests
 
     class Example(Scraper):
         def __init__(self):
@@ -98,7 +95,7 @@ if __name__ == '__main__':
         def has_next(self):
             return self.v.value < 10
 
-        def page_to_log_string(self, page):
+        def page_to_log_str(self, page):
             return str(page['name'])+' '+str(page['response'])
 
     example = Example()
