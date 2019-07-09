@@ -1,7 +1,6 @@
 from multiprocessing import Process, Lock
 from time import time, strftime, gmtime
 
-
 class Scraper(object):
     def __init__(self):
         self.start_time = time()
@@ -9,9 +8,14 @@ class Scraper(object):
         self.processes = 10
 
     def run(self, cb):
-        """
-        cb(self, page) is a function that takes the result of
-        get_page and does something with it (e.g. save the page to disk).
+        """Get pages and executes cb function on each
+
+        Parameters
+        ----------
+        cb : callable
+            A callback function that takes self and the
+            result of self.get_page and processes it
+            (e.g. saves the page to disk)
         """
         def r():
             while self.has_next():
@@ -26,6 +30,8 @@ class Scraper(object):
 
     def get_page(self):
         """override this method
+
+        may return anything
         """
         with self.lock:
             v = 'self.v.value'
@@ -37,6 +43,8 @@ class Scraper(object):
 
     def next(self):
         """override this method
+
+        sets a class field to
         """
         pass
 
@@ -45,10 +53,20 @@ class Scraper(object):
         """
         return True
 
+    def page_to_log_str(self, page):
+        """override this method
+
+        takes page and returns a string
+        to use for printing progress
+        """
+        pass
+
     def log(self, page):
+        """Prints the progress of the scraper
+        """
         t = time()-self.start_time
         t = strftime('%Hh %Mm %Ss', gmtime(t))
-        print (page['name'], page['response'], t, 'elapsed')
+        print (self.page_to_log_str(page), t, 'elapsed')
 
 
 if __name__ == '__main__':
@@ -78,6 +96,9 @@ if __name__ == '__main__':
 
         def has_next(self):
             return self.v.value < 10
+
+        def page_to_log_string(self, page):
+            return str(page['name'])+' '+str(page['response'])
 
     example = Example()
     def cb(self, page):
