@@ -72,6 +72,7 @@ class Scraper(object):
 if __name__ == '__main__':
     from multiprocessing import Value
     class requests(object):
+        @staticmethod
         def get(url):
             pass
 
